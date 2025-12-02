@@ -16,25 +16,29 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [admRes, denRes, occRes] = await Promise.all([
-          axios.get('http://localhost:3000/metrics/admissions'),
-          axios.get('http://localhost:3000/metrics/denials'),
-          axios.get('http://localhost:3000/metrics/bed-occupancy')
-        ]);
-        setAdmissions(admRes.data);
-        setDenials(denRes.data);
-        setOccupancy(occRes.data);
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  
+  const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [admRes, denRes, occRes] = await Promise.all([
+        axios.get(`${baseURL}/metrics/admissions`),
+        axios.get(`${baseURL}/metrics/denials`),
+        axios.get(`${baseURL}/metrics/bed-occupancy`)
+      ]);
+      setAdmissions(admRes.data);
+      setDenials(denRes.data);
+      setOccupancy(occRes.data);
+    } catch (err) {
+      console.error('API Error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchData();
+}, []);
+    
   const pieData = occupancy.map(o => ({
     name: o.ward,
     value: Math.round((o.occupied / o.total) * 100)
@@ -93,9 +97,9 @@ function App() {
                   label={({ name, value }) => `${name}: ${value}%`}
                   outerRadius={100} fill="#8884d8" dataKey="value"
                 >
-                  {pieData.map((entry, i) => (
-                    <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
-                  ))}
+                 {pieData.map((_entry, i) => (
+  <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
+))}
                 </Pie>
                 <Tooltip />
               </PieChart>

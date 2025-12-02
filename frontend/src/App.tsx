@@ -16,8 +16,8 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  
-  const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+  // Hardcoded for production — localhost for dev
+  const baseURL = import.meta.env.DEV ? 'http://localhost:3000' : 'https://hcaredashboard.onrender.com';
 
   const fetchData = async () => {
     try {

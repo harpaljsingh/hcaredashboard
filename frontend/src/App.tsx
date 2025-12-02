@@ -16,29 +16,29 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  // FORCE LIVE BACKEND — works on Vercel and locally (just wake Render first)
-  const baseURL = 'https://hcaredashboard.onrender.com';
+    // THIS IS THE ONLY LINE THAT MATTERS — HARD-CODED TO YOUR RENDER BACKEND
+    const baseURL = 'https://hcaredashboard.onrender.com';
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const [admRes, denRes, occRes] = await Promise.all([
-        axios.get(`${baseURL}/metrics/admissions`),
-        axios.get(`${baseURL}/metrics/denials`),
-        axios.get(`${baseURL}/metrics/bed-occupancy`)
-      ]);
-      setAdmissions(admRes.data);
-      setDenials(denRes.data);
-      setOccupancy(occRes.data);
-    } catch (err) {
-      console.error('API Error:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  fetchData();
-}, []);
-    
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [admRes, denRes, occRes] = await Promise.all([
+          axios.get(`${baseURL}/metrics/admissions`),
+          axios.get(`${baseURL}/metrics/denials`),
+          axios.get(`${baseURL}/metrics/bed-occupancy`)
+        ]);
+        setAdmissions(admRes.data);
+        setDenials(denRes.data);
+        setOccupancy(occRes.data);
+      } catch (err) {
+        console.error('API Error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
   const pieData = occupancy.map(o => ({
     name: o.ward,
     value: Math.round((o.occupied / o.total) * 100)
@@ -46,13 +46,13 @@ function App() {
 
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
 
-  if (loading) return <div className="p-8 text-2xl">Loading dashboard...</div>;
+  if (loading) return <div className="p-12 text-3xl text-center">Loading dashboard...</div>;
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-800">Healthcare Analytics Dashboard</h1>
-        <p className="text-gray-600 mt-2">Real-time KPIs • Built with React + TypeScript + NestJS</p>
+      <header className="mb-8 text-center">
+        <h1 className="text-5xl font-bold text-gray-800">Healthcare Analytics Dashboard</h1>
+        <p className="text-xl text-gray-600 mt-2">Built with React + TypeScript + NestJS</p>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
@@ -97,9 +97,9 @@ function App() {
                   label={({ name, value }) => `${name}: ${value}%`}
                   outerRadius={100} fill="#8884d8" dataKey="value"
                 >
-                 {pieData.map((_entry, i) => (
-  <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
-))}
+                  {pieData.map((entry, i) => (
+                    <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
+                  ))}
                 </Pie>
                 <Tooltip />
               </PieChart>
@@ -119,8 +119,8 @@ function App() {
         </div>
       </div>
 
-      <footer className="mt-12 text-center text-gray-500">
-        Built from scratch in one weekend by a Data Engineer learning TypeScript
+      <footer className="mt-16 text-center text-gray-500">
+        Built from scratch in one day by Harpal Singh • Data Engineer learning TypeScript
       </footer>
     </div>
   );

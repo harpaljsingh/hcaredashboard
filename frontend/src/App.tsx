@@ -16,8 +16,8 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  // Hardcoded for production — localhost for dev
-  const baseURL = import.meta.env.DEV ? 'http://localhost:3000' : 'https://hcaredashboard.onrender.com';
+  // FORCE LIVE BACKEND — works on Vercel and locally (just wake Render first)
+  const baseURL = 'https://hcaredashboard.onrender.com';
 
   const fetchData = async () => {
     try {

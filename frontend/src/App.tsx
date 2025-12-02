@@ -97,10 +97,10 @@ function App() {
                   label={({ name, value }) => `${name}: ${value}%`}
                   outerRadius={100} fill="#8884d8" dataKey="value"
                 >
-                  {pieData.map((entry, i) => (
-                    <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
-                  ))}
-                </Pie>
+                  {pieData.map((_entry, i) => (
+                  <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
+                  ))}                 
+                  </Pie>
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>
